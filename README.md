@@ -2,7 +2,7 @@
 
 [![](https://vueschool.io/media/f007f6057444d9a7f567163391d2b366/vuejs-3-master-class-not-transparent.jpg)](https://vueschool.io/the-vuejs-master-class)
 
-This repository contains the source code for the supercharged, remastered [Vue.js 3 Masterclass](https://vueschool.io/the-vuejs-master-class) course.
+This repository contains the source code for the supercharged, remastered 2021 [Vue.js 3 Masterclass](https://vueschool.io/the-vuejs-master-class) course.
 
 We’ve taken all the feedback we got from The Vue.js 2 Masterclass, and supercharged The Vue.js Masterclass with all the new goodies from Vue.js 3 and the ecosystem.
 
