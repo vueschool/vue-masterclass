@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 body {
     background-color: #F6F8FF;
     min-height: 100vh;
@@ -504,7 +502,6 @@ figcaption {
 }
 
 .post-content blockquote.small {
-/ / display: flex;
     position: relative;
     flex-direction: column;
     border: 2px solid rgba(152, 152, 152, 0.15);
