@@ -35,7 +35,6 @@
 
 <script>
 import sourceData from '@/data.json'
-import AppDate from '@/components/AppDate'
 
 export default {
   props: {
@@ -43,9 +42,6 @@ export default {
       required: true,
       type: Array
     }
-  },
-  components: {
-    AppDate
   },
   data () {
     return {

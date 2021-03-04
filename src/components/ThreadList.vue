@@ -1,6 +1,5 @@
 <template>
   <div class="col-full">
-
     <div class="thread-list">
 
       <h2 class="list-title">Threads</h2>
@@ -37,16 +36,12 @@
 
 <script>
 import sourceData from '@/data.json'
-import AppDate from '@/components/AppDate'
 export default {
   props: {
     threads: {
       type: Array,
       required: true
     }
-  },
-  components: {
-    AppDate
   },
   data () {
     return {
