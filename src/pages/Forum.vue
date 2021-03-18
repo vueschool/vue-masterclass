@@ -16,7 +16,7 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
-import sourceData from '@/data.json'
+
 export default {
   components: { ThreadList },
   props: {
@@ -27,10 +27,10 @@ export default {
   },
   computed: {
     forum () {
-      return sourceData.forums.find(forum => forum.id === this.id)
+      return this.$store.state.forums.find(forum => forum.id === this.id)
     },
     threads () {
-      return sourceData.threads.filter(thread => thread.forumId === this.id)
+      return this.$store.state.threads.filter(thread => thread.forumId === this.id)
     }
   }
 }
