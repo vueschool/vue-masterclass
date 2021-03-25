@@ -5,12 +5,18 @@ import Forum from '@/pages/Forum'
 import Category from '@/pages/Category'
 import { createRouter, createWebHistory } from 'vue-router'
 import sourceData from '@/data.json'
+import Profile from '@/pages/Profile'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/me',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '/category/:id',
