@@ -16,7 +16,7 @@
 
         <div class="activity">
           <p class="replies-count">
-           {{ thread.posts.length }} replies
+           {{ thread.posts.length }} {{ (thread.posts.length > 1 || thread.posts.length === 0) ? "replies" : "reply" }}
           </p>
 
           <img class="avatar-medium" :src="userById(thread.userId).avatar" alt="">
