@@ -19,6 +19,12 @@ const routes = [
     component: Profile
   },
   {
+    path: '/me/edit',
+    name: 'ProfileEdit',
+    component: Profile,
+    props: { edit: true }
+  },
+  {
     path: '/category/:id',
     name: 'Category',
     component: Category,
