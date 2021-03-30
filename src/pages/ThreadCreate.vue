@@ -40,7 +40,12 @@
 <script>
 export default {
   props: {
-    forum: { type: Object, required: true }
+    forumId: { type: String, required: true }
+  },
+  computed: {
+    forum () {
+      return this.$store.state.forums.find(forum => forum.id === this.forumId)
+    }
   },
   data () {
     return {
