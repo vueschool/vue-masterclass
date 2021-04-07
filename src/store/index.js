@@ -46,16 +46,35 @@ export default createStore({
       dispatch('createPost', { text, threadId: id })
       return state.threads.find(thread => thread.id === id)
     },
+    async updateThread ({ commit, state }, { title, text, id }) {
+      const thread = state.threads.find(thread => thread.id === id)
+      const post = state.posts.find(post => post.id === thread.posts[0])
+      const newThread = { ...thread, title }
+      const newPost = { ...post, text }
+      commit('setThread', { thread: newThread })
+      commit('setPost', { post: newPost })
+      return newThread
+    },
     updateUser ({ commit }, user) {
       commit('setUser', { user, userId: user.id })
     }
   },
   mutations: {
     setPost (state, { post }) {
-      state.posts.push(post)
+      const index = state.posts.findIndex(p => p.id === post.id)
+      if (post.id && index !== -1) {
+        state.posts[index] = post
+      } else {
+        state.posts.push(post)
+      }
     },
     setThread (state, { thread }) {
-      state.threads.push(thread)
+      const index = state.threads.findIndex(t => t.id === thread.id)
+      if (thread.id && index !== -1) {
+        state.threads[index] = thread
+      } else {
+        state.threads.push(thread)
+      }
     },
     setUser (state, { user, userId }) {
       const userIndex = state.users.findIndex(user => user.id === userId)
