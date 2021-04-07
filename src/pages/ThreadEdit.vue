@@ -9,6 +9,7 @@
 </template>
 <script>
 import ThreadEditor from '@/components/ThreadEditor'
+import { findById } from '@/helpers'
 export default {
   components: { ThreadEditor },
   props: {
@@ -16,12 +17,10 @@ export default {
   },
   computed: {
     thread () {
-      return this.$store.state.threads.find(thread => thread.id === this.id)
+      return findById(this.$store.state.threads, this.id)
     },
     text () {
-      return this.$store.state.posts.find(
-        post => post.id === this.thread.posts[0]
-      ).text
+      return findById(this.$store.state.posts, this.thread.posts[0]).text
     }
   },
   methods: {
