@@ -94,8 +94,24 @@ export default createStore({
     fetchPost ({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'posts', id, emoji: '💬' })
     },
+    fetchAllCategories ({ commit }) {
+      console.log('🔥', '🏷', 'all')
+      return new Promise((resolve) => {
+        firebase.firestore().collection('categories').onSnapshot((querySnapshot) => {
+          const categories = querySnapshot.docs.map(doc => {
+            const item = { id: doc.id, ...doc.data() }
+            commit('setItem', { resource: 'categories', item })
+            return item
+          })
+          resolve(categories)
+        })
+      })
+    },
     fetchThreads ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { resource: 'threads', ids, emoji: '📄' })
+    },
+    fetchForums ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'forums', ids, emoji: '🏁' })
     },
     fetchUsers ({ dispatch }, { ids }) {
       return dispatch('fetchItems', { resource: 'users', ids, emoji: '🙋' })
