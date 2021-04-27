@@ -71,10 +71,10 @@ export default {
     this.$store.dispatch('fetchUser', { id: thread.userId })
 
     // fetch the posts
-    thread.posts.forEach(async (postId) => {
-      const post = await this.$store.dispatch('fetchPost', { id: postId })
-      this.$store.dispatch('fetchUser', { id: post.userId })
-    })
+    const posts = await this.$store.dispatch('fetchPosts', { ids: thread.posts })
+    // fetch the users associated with the posts
+    const users = posts.map(post => post.userId)
+    this.$store.dispatch('fetchUsers', { ids: users })
   }
 }
 </script>
