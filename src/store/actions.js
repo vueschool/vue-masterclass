@@ -1,12 +1,20 @@
 import firebase from 'firebase'
 import { findById } from '@/helpers'
 export default {
-  createPost ({ commit, state }, post) {
-    post.id = 'ggqq' + Math.random()
+  async createPost ({ commit, state }, post) {
     post.userId = state.authId
     post.publishedAt = Math.floor(Date.now() / 1000)
-    commit('setItem', { resource: 'posts', item: post }) // set the post
-    commit('appendPostToThread', { childId: post.id, parentId: post.threadId }) // append post to thread
+    const batch = firebase.firestore().batch()
+    const postRef = firebase.firestore().collection('posts').doc()
+    const threadRef = firebase.firestore().collection('threads').doc(post.threadId)
+    batch.set(postRef, post)
+    batch.update(threadRef, {
+      posts: firebase.firestore.FieldValue.arrayUnion(postRef.id),
+      contributors: firebase.firestore.FieldValue.arrayUnion(state.authId)
+    })
+    await batch.commit()
+    commit('setItem', { resource: 'posts', item: { ...post, id: postRef.id } }) // set the post
+    commit('appendPostToThread', { childId: postRef.id, parentId: post.threadId }) // append post to thread
     commit('appendContributorToThread', { childId: state.authId, parentId: post.threadId })
   },
   async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
