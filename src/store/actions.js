@@ -7,10 +7,14 @@ export default {
     const batch = firebase.firestore().batch()
     const postRef = firebase.firestore().collection('posts').doc()
     const threadRef = firebase.firestore().collection('threads').doc(post.threadId)
+    const userRef = firebase.firestore().collection('users').doc(state.authId)
     batch.set(postRef, post)
     batch.update(threadRef, {
       posts: firebase.firestore.FieldValue.arrayUnion(postRef.id),
       contributors: firebase.firestore.FieldValue.arrayUnion(state.authId)
+    })
+    batch.update(userRef, {
+      postsCount: firebase.firestore.FieldValue.increment(1)
     })
     await batch.commit()
     const newPost = await postRef.get()
