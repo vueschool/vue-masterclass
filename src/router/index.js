@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import sourceData from '@/data.json'
 import Profile from '@/pages/Profile'
 import { findById } from '@/helpers'
+import store from '@/store'
 const routes = [
   {
     path: '/',
@@ -80,8 +81,7 @@ const routes = [
     component: NotFound
   }
 ]
-
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior (to) {
@@ -91,3 +91,8 @@ export default createRouter({
     return scroll
   }
 })
+router.beforeEach(() => {
+  store.dispatch('unsubscribeAllSnapshots')
+})
+
+export default router
