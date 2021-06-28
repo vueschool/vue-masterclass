@@ -2,7 +2,7 @@ import firebase from 'firebase'
 import { findById, docToResource } from '@/helpers'
 export default {
   initAuthentication ({ dispatch, commit, state }) {
-    if (state.authObserverUnsubscribe) return
+    if (state.authObserverUnsubscribe) state.authObserverUnsubscribe()
     return new Promise((resolve) => {
       const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
         console.log('👣 the user has changed')
@@ -113,6 +113,7 @@ export default {
   },
   async signOut ({ commit }) {
     await firebase.auth().signOut()
+
     commit('setAuthId', null)
   },
   async createUser ({ commit }, { id, email, name, username, avatar = null }) {
