@@ -17,9 +17,9 @@ export default {
       return new Promise((resolve) => {
         const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
           console.log('👣 the user has changed')
-          this.dispatch('unsubscribeAuthUserSnapshot')
+          this.dispatch('auth/unsubscribeAuthUserSnapshot')
           if (user) {
-            await this.dispatch('fetchAuthUser')
+            await this.dispatch('auth/fetchAuthUser')
             resolve(user)
           } else {
             resolve(null)
