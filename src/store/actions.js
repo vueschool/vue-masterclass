@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import { findById, docToResource } from '@/helpers'
 export default {
 
   fetchItem ({ state, commit }, { id, emoji, resource, handleUnsubscribe = null }) {
