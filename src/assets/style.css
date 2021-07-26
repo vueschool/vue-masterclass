@@ -2543,3 +2543,11 @@ hr {
     background: #F5F8FE;
     min-height: 100vh;
 }
+/* style.css */
+.Pagination{
+  justify-content: center;
+  margin: 40px !important;
+}
+.Pagination .Page-active{
+  color:white;
+}
