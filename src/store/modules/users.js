@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import { docToResource, makeAppendChildToParentMutation, findById } from '@/helpers'
+import { docToResource, makeAppendChildToParentMutation, findById, makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 export default {
   namespaced: true,
   state: {
@@ -54,14 +54,8 @@ export default {
       await userRef.update(updates)
       commit('setItem', { resource: 'users', item: user }, { root: true })
     },
-    fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem',
-      { emoji: '🙋', resource: 'users', id },
-      { root: true }
-    ),
-    fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems',
-      { resource: 'users', ids, emoji: '🙋' },
-      { root: true }
-    )
+    fetchUser: makeFetchItemAction({ emoji: '🙋', resource: 'users' }),
+    fetchUsers: makeFetchItemsAction({ resource: 'users', emoji: '🙋' })
   },
   mutations: {
     appendThreadToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'threads' })
