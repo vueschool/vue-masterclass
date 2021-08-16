@@ -34,6 +34,7 @@ import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import useNotifications from '@/composables/useNotifications'
 export default {
   name: 'ThreadShow',
   components: {
@@ -46,6 +47,9 @@ export default {
       required: true,
       type: String
     }
+  },
+  setup () {
+    const { addNotification } = useNotifications()
   },
   computed: {
     ...mapGetters('auth', ['authUser']),
