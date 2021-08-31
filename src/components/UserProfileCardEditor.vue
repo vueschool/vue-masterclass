@@ -10,7 +10,7 @@
           />
           <div class="avatar-upload-overlay">
             <AppSpinner v-if="uploadingImage" color="white" />
-            <fa v-else icon="camera" size="3x" :style="{color: 'white', opacity: '8'}" />
+            <fa v-else icon="camera" size="3x" :style="{color: 'white', opacity: '.8'}" />
           </div>
           <input v-show="false" type="file" id="avatar" accept="image/*" @change="handleAvatarUpload">
         </label>
