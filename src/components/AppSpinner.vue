@@ -1,3 +1,15 @@
+<script>
+export default {
+  props: {
+    color: { type: String, default: '#263959' }
+  },
+  data () {
+    return {
+      spinnerColor: this.color
+    }
+  }
+}
+</script>
 <template>
   <div class="sk-circle">
     <div class="sk-circle1 sk-child"></div>
@@ -34,7 +46,7 @@
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #263959;
+  background-color: v-bind(spinnerColor);
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
           animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
