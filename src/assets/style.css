@@ -2551,3 +2551,12 @@ hr {
 .Pagination .Page-active{
   color:white;
 }
+.avatar-edit{
+  position:relative;
+}
+.avatar-edit .avatar-upload-overlay{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
