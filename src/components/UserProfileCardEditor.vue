@@ -109,7 +109,8 @@ export default {
     async handleAvatarUpload (e) {
       this.uploadingImage = true
       const file = e.target.files[0]
-      this.activeUser.avatar = await this.uploadAvatar({ file })
+      const uploadedImage = await this.uploadAvatar({ file })
+      this.activeUser.avatar = uploadedImage || this.activeUser.avatar
       this.uploadingImage = false
     },
     save () {
