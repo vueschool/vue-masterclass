@@ -8,3 +8,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  img{
+    object-fit: cover;
+  }
+</style>

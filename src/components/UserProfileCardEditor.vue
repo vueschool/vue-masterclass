@@ -15,6 +15,7 @@
           <input v-show="false" type="file" id="avatar" accept="image/*" @change="handleAvatarUpload">
         </label>
       </p>
+      <UserProfileCardEditorRandomAvatar @hit="activeUser.avatar = $event" />
 
       <div class="form-group">
         <input
@@ -91,7 +92,9 @@
 
 <script>
 import { mapActions } from 'vuex'
+import UserProfileCardEditorRandomAvatar from './UserProfileCardEditorRandomAvatar'
 export default {
+  components: { UserProfileCardEditorRandomAvatar },
   props: {
     user: {
       type: Object,
