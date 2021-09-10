@@ -1,5 +1,5 @@
 import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
-import { required, email, min } from '@vee-validate/rules'
+import { required, email, min, url } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
 import { mapValues } from 'lodash'
 
@@ -15,6 +15,10 @@ const rules = {
   min: {
     test: min,
     message: '{field} must be a minimum of 0:{min} characters'
+  },
+  url: {
+    test: url,
+    message: '{field} must be a valid URL'
   }
 }
 
