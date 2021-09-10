@@ -13,14 +13,18 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/vue-fontawesome": "^3.0.0-3",
     "@hennge/vue3-pagination": "^1.0.17",
+    "@vee-validate/i18n": "^4.4.7",
+    "@vee-validate/rules": "^4.4.7",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
     "firebase": "^8.4.1",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "vee-validate": "^4.4.10",
     "vue": "^3.0.0",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
