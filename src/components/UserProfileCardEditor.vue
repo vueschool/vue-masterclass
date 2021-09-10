@@ -17,7 +17,7 @@
       </p>
       <UserProfileCardEditorRandomAvatar @hit="activeUser.avatar = $event" />
 
-      <AppFormField label="Username" name="username" v-model="activeUser.username" rules="required" />
+      <AppFormField label="Username" name="username" v-model="activeUser.username" :rules="`required|unique:users,username,${user.username}`" />
       <AppFormField label="Full Name" name="name" v-model="activeUser.name" rules="required" />
       <AppFormField label="Bio" name="bio" as="textarea" v-model="activeUser.bio" placeholder="Write a few words about yourself." />
 
@@ -28,7 +28,7 @@
       <hr />
 
       <AppFormField label="Website" name="website" v-model="activeUser.website" rules="url" />
-      <AppFormField label="Email" name="email" v-model="activeUser.email" rules="required|email"/>
+      <AppFormField label="Email" name="email" v-model="activeUser.email" :rules="`required|email|unique:users,email,${user.email}`"/>
       <AppFormField label="Location" name="location" v-model="activeUser.location" @mouseover="loadLocations" list="locations">
         <datalist id="locations">
           <option v-for="location in locationOptions" :value="location.name" :key="location.name" />

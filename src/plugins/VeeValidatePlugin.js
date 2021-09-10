@@ -1,7 +1,9 @@
 import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
 import { required, email, min, url } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
-import { mapValues } from 'lodash'
+import mapValues from 'lodash/mapValues'
+import debounce from 'lodash/debounce'
+import firebase from 'firebase'
 
 const rules = {
   required: {
@@ -19,6 +21,15 @@ const rules = {
   url: {
     test: url,
     message: '{field} must be a valid URL'
+  },
+  unique: {
+    async test (value, options) {
+      const [collection, field, excluding] = options
+      if (value === excluding) return true
+      const querySnapshot = await firebase.firestore().collection(collection).where(field, '==', value).get()
+      return querySnapshot.empty
+    },
+    message: '{field} is already taken'
   }
 }
 
