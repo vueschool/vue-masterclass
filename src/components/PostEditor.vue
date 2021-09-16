@@ -1,13 +1,11 @@
 <template>
   <div class="col-full">
-    <form @submit.prevent="save">
-      <div class="form-group">
-        <textarea v-model="postCopy.text" name="" id="" cols="30" rows="10" class="form-input"/>
-      </div>
+    <VeeForm @submit="save">
+      <AppFormField name="text" v-model="postCopy.text" as="textarea" rows="10" cols="30" rules="required"/>
       <div class="form-actions">
         <button class="btn-blue">{{post.id ? 'Update Post' : 'Submit post'}}</button>
       </div>
-    </form>
+    </VeeForm>
   </div>
 </template>
 
