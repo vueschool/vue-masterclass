@@ -2,7 +2,6 @@ import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
 import { required, email, min, url } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
 import mapValues from 'lodash/mapValues'
-import debounce from 'lodash/debounce'
 import firebase from 'firebase'
 
 const rules = {
