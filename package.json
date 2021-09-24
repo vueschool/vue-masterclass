@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/vue-fontawesome": "^3.0.0-3",
     "@hennge/vue3-pagination": "^1.0.17",
+    "@vee-validate/i18n": "^4.4.7",
     "@vee-validate/rules": "^4.4.7",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
