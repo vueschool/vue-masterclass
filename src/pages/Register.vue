@@ -5,8 +5,8 @@
         <h1 class="text-center">Register</h1>
 
         <AppFormField v-model="form.name" name="name" label="Name" rules="required" />
-        <AppFormField v-model="form.username" name="username" label="Username" rules="required" />
-        <AppFormField v-model="form.email" name="email" label="Email" rules="required|email" type="email" />
+        <AppFormField v-model="form.username" name="username" label="Username" rules="required|unique:users,username" />
+        <AppFormField v-model="form.email" name="email" label="Email" rules="required|email|unique:users,email" type="email" />
         <AppFormField v-model="form.password" name="password" label="Password" rules="required|min:8" type="password" />
 
         <div class="form-group">
