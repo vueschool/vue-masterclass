@@ -30,7 +30,10 @@
 
       <AppFormField label="Website" name="website" v-model="activeUser.website" rules="url" />
       <AppFormField label="Email" name="email" v-model="activeUser.email" :rules="`required|email|unique:users,email,${user.email}`"/>
-      <AppFormField label="Location" name="location" v-model="activeUser.location" />
+      <AppFormField label="Location" name="location" v-model="activeUser.location" list="locations" @mouseenter="loadLocationOptions"/>
+      <datalist id="locations">
+        <option v-for="location in locationOptions" :value="location.name.common" :key="location.name.common" />
+      </datalist>
 
       <div class="btn-group space-between">
         <button class="btn-ghost" @click.prevent="cancel">Cancel</button>
@@ -54,11 +57,17 @@ export default {
   data () {
     return {
       uploadingImage: false,
-      activeUser: { ...this.user }
+      activeUser: { ...this.user },
+      locationOptions: []
     }
   },
   methods: {
     ...mapActions('auth', ['uploadAvatar']),
+    async loadLocationOptions () {
+      if (this.locationOptions.length) return
+      const res = await fetch('https://restcountries.com/v3/all')
+      this.locationOptions = await res.json()
+    },
     async handleAvatarUpload (e) {
       this.uploadingImage = true
       const file = e.target.files[0]
