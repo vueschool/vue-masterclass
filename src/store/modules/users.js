@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from '@/helpers/firebase'
 import { docToResource, makeAppendChildToParentMutation, findById, makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 export default {
   namespaced: true,
