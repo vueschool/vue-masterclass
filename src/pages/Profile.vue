@@ -9,7 +9,6 @@
       <div class="col-7 push-top">
         <div class="profile-header">
           <span class="text-lead"> {{user.username}} recent activity </span>
-          <a href="#">See only started threads?</a>
         </div>
         <hr />
         <PostList :posts="user.posts" />

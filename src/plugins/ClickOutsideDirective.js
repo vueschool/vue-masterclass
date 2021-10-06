@@ -1,7 +1,6 @@
 const ClickOutsideDirective = {
   mounted (el, binding) {
     el.__ClickOutsideHandler__ = event => {
-      console.log('clicking outside')
       if (!(el === event.target || el.contains(event.target))) {
         binding.value(event)
       }
