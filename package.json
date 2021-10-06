@@ -22,6 +22,7 @@
     "nprogress": "^0.2.0",
     "vee-validate": "^4.4.11",
     "vue": "^3.0.0",
+    "vue-final-modal": "^3.4.2",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },
