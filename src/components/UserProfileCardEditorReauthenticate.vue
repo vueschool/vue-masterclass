@@ -1,5 +1,5 @@
 <template>
-  <VueFinalModal v-modal="showModal" classes="modal-container" content-class="modal">
+  <VueFinalModal v-model="showModal" classes="modal-container" content-class="modal">
     <div class="modal-content">
       <h4>Login Again to Change Your Email</h4>
       <VeeForm @submit="reauthenticate">
