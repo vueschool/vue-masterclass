@@ -1,5 +1,7 @@
 # The Vue 3 Masterclass
 
+### This branch is to demonstrate code changes required for using Firebase version 9. (WIP)
+
 [![](https://vueschool.io/media/f007f6057444d9a7f567163391d2b366/vuejs-3-master-class-not-transparent.jpg)](https://vueschool.io/the-vuejs-master-class)
 
 This repository contains the source code for the supercharged, remastered 2021 [Vue.js 3 Masterclass](https://vueschool.io/the-vuejs-master-class) course.
