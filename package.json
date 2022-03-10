@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "db:seed": "firebase firestore:delete --all-collections --yes && node firestoreImport"
+    "db:seed": "firebase firestore:delete --all-collections -f  && node firestoreImport"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -18,7 +18,7 @@
     "@vueuse/head": "^0.6.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
-    "firebase": "^8.4.1",
+    "firebase": "^9.6.8",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "vee-validate": "^4.4.11",
@@ -47,5 +47,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
+  }
 }
