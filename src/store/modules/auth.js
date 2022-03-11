@@ -1,5 +1,27 @@
-import firebase from '@/helpers/firebase'
+import { db, auth, storage } from '@/helpers/firebase'
 import useNotifications from '@/composables/useNotifications'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import {
+  doc,
+  collection,
+  getDocs,
+  getDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter
+} from 'firebase/firestore'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider
+} from 'firebase/auth'
+
 export default {
   namespaced: true,
   state: {
@@ -7,26 +29,33 @@ export default {
     authUserUnsubscribe: null,
     authObserverUnsubscribe: null
   },
+
   getters: {
     authUser: (state, getters, rootState, rootGetters) => {
       return rootGetters['users/user'](state.authId)
     }
   },
+
   actions: {
-    async updateEmail ({ state }, { email }) {
-      return firebase.auth().currentUser.updateEmail(email)
+    async updateEmail({ state }, { email }) {
+      return updateEmail(auth.currentUser, email)
     },
-    async reauthenticate ({ state }, { email, password }) {
-      const credential = firebase.auth.EmailAuthProvider.credential(email, password)
-      await firebase.auth().currentUser.reauthenticateWithCredential(credential)
+    async reauthenticate({ state }, { email, password }) {
+      try {
+        const credential = EmailAuthProvider.credential(email, password)
+        const user = auth.currentUser
+        await reauthenticateWithCredential(user, credential)
+      } catch (error) {
+        console.log({ error })
+      }
     },
-    initAuthentication ({ dispatch, commit, state }) {
+    initAuthentication({ dispatch, commit, state }) {
       if (state.authObserverUnsubscribe) state.authObserverUnsubscribe()
-      return new Promise((resolve) => {
-        const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-          dispatch('unsubscribeAuthUserSnapshot')
+      return new Promise(resolve => {
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+          this.dispatch('auth/unsubscribeAuthUserSnapshot')
           if (user) {
-            await dispatch('fetchAuthUser')
+            await this.dispatch('auth/fetchAuthUser')
             resolve(user)
           } else {
             resolve(null)
@@ -35,93 +64,136 @@ export default {
         commit('setAuthObserverUnsubscribe', unsubscribe)
       })
     },
-    async registerUserWithEmailAndPassword ({ dispatch }, { avatar = null, email, name, username, password }) {
-      const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
-      avatar = await dispatch('uploadAvatar', { authId: result.user.uid, file: avatar })
-      await dispatch('users/createUser', { id: result.user.uid, email, name, username, avatar }, { root: true })
+    async registerUserWithEmailAndPassword(
+      { dispatch },
+      { avatar = null, email, name, username, password }
+    ) {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+
+      avatar = await dispatch('uploadAvatar', {
+        authId: result.user.uid,
+        file: avatar
+      })
+
+      await dispatch(
+        'users/createUser',
+        {
+          id: result.user.uid,
+          email,
+          name,
+          username,
+          avatar
+        },
+        { root: true }
+      )
     },
-    async uploadAvatar ({ state }, { authId, file, filename }) {
+
+    async uploadAvatar({ state }, { authId, file, filename }) {
       if (!file) return null
       authId = authId || state.authId
       filename = filename || file.name
       try {
-        const storageBucket = firebase.storage().ref().child(`uploads/${authId}/images/${Date.now()}-${filename}`)
-        const snapshot = await storageBucket.put(file)
-        const url = await snapshot.ref.getDownloadURL()
-        return url
+        const storageRef = ref(
+          storage,
+          `uploads/${authId}/images/${Date.now()}-${filename}`
+        )
+
+        return uploadBytes(storageRef, file).then(snapshot => {
+          return getDownloadURL(storageRef)
+        })
       } catch (error) {
         const { addNotification } = useNotifications()
-        addNotification({ message: 'Error uploading avatar image', type: 'error' })
+        addNotification({
+          message: 'Error uploading avatar image',
+          type: 'error'
+        })
       }
     },
-    signInWithEmailAndPassword (context, { email, password }) {
-      return firebase.auth().signInWithEmailAndPassword(email, password)
-    },
-    async signInWithGoogle ({ dispatch }) {
-      const provider = new firebase.auth.GoogleAuthProvider()
-      const response = await firebase.auth().signInWithPopup(provider)
-      const user = response.user
-      const userRef = firebase.firestore().collection('users').doc(user.uid)
-      const userDoc = await userRef.get()
-      if (!userDoc.exists) {
-        return dispatch('users/createUser',
-          { id: user.uid, name: user.displayName, email: user.email, username: user.email, avatar: user.photoURL },
-          { root: true }
-        )
-      }
-    },
-    async signOut ({ commit }) {
-      await firebase.auth().signOut()
 
+    signInWithEmailAndPassword(context, { email, password }) {
+      return signInWithEmailAndPassword(auth, email, password)
+    },
+    async signInWithGoogle({ dispatch }) {
+      try {
+        const provider = new GoogleAuthProvider()
+        const response = await signInWithPopup(auth, provider)
+        const user = response.user
+        const userDoc = doc(db, 'users', user.uid)
+
+        if (!userDoc.exists) {
+          return dispatch(
+            'users/createUser',
+            {
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              username: user.email,
+              avatar: user.photoURL
+            },
+            { root: true }
+          )
+        }
+      } catch (error) {
+        alert(error.message)
+      }
+    },
+    async signOut({ commit }) {
+      await auth.signOut()
       commit('setAuthId', null)
     },
     fetchAuthUser: async ({ dispatch, state, commit }) => {
-      const userId = firebase.auth().currentUser?.uid
+      const userId = auth.currentUser?.uid
       if (!userId) return
-      await dispatch('fetchItem', {
-        emoji: '🙋',
-        resource: 'users',
-        id: userId,
-        handleUnsubscribe: (unsubscribe) => {
-          commit('setAuthUserUnsubscribe', unsubscribe)
-        }
-      },
-      { root: true }
+
+      await dispatch(
+        'fetchItem',
+        {
+          emoji: '🙋',
+          resource: 'users',
+          id: userId,
+          handleUnsubscribe: unsubscribe => {
+            commit('setAuthUserUnsubscribe', unsubscribe)
+          }
+        },
+        { root: true }
       )
+
       commit('setAuthId', userId)
     },
-    async fetchAuthUsersPosts ({ commit, state }, { startAfter }) {
-      // limit(10)
-      // startAfter(doc)
-      // orderBy()
-      let query = await firebase.firestore().collection('posts')
-        .where('userId', '==', state.authId)
-        .orderBy('publishedAt', 'desc')
-        .limit(10)
-      if (startAfter) {
-        const doc = await firebase.firestore().collection('posts').doc(startAfter.id).get()
-        query = query.startAfter(doc)
-      }
-      const posts = await query.get()
-      posts.forEach(item => {
+    async fetchAuthUsersPosts({ commit, state }, { lastPost }) {
+      const queryArgs = [
+        collection(db, 'posts'),
+        where('userId', '==', state.authId),
+        orderBy('publishedAt', 'desc'),
+        lastPost
+          ? startAfter(await getDoc(doc(db, 'posts', lastPost.id)))
+          : null,
+        limit(10)
+      ].filter(param => param !== null)
+
+      const postsQuery = query(...queryArgs)
+      const querySnapshot = await getDocs(postsQuery)
+
+      querySnapshot.forEach(item => {
         commit('setItem', { resource: 'posts', item }, { root: true })
       })
     },
-    async unsubscribeAuthUserSnapshot ({ state, commit }) {
+    async unsubscribeAuthUserSnapshot({ state, commit }) {
       if (state.authUserUnsubscribe) {
         state.authUserUnsubscribe()
         commit('setAuthUserUnsubscribe', null)
       }
     }
   },
+
   mutations: {
-    setAuthId (state, id) {
+    setAuthId(state, id) {
       state.authId = id
     },
-    setAuthUserUnsubscribe (state, unsubscribe) {
+    setAuthUserUnsubscribe(state, unsubscribe) {
       state.authUserUnsubscribe = unsubscribe
     },
-    setAuthObserverUnsubscribe (state, unsubscribe) {
+    setAuthObserverUnsubscribe(state, unsubscribe) {
       state.authObserverUnsubscribe = unsubscribe
     }
   }

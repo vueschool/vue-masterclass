@@ -1,34 +1,30 @@
 <template>
-<div v-if="asyncDataStatus_ready" class="col-full">
-  <div v-if="forum" class="col-full push-top">
-    <AppHead>
-      <title>{{forum?.name}}</title>
-      <meta property="og:title" :content="forum?.name">
-      <meta name="twitter:title" :content="forum?.name">
-    </AppHead>
-    <div class="forum-header">
-      <div class="forum-details">
-        <h1>{{ forum.name }}</h1>
-        <p class="text-lead">{{ forum.description }}</p>
+  <div v-if="asyncDataStatus_ready" class="col-full">
+    <div v-if="forum" class="col-full push-top">
+      <AppHead>
+        <title>{{ forum?.name }}</title>
+        <meta property="og:title" :content="forum?.name" />
+        <meta name="twitter:title" :content="forum?.name" />
+      </AppHead>
+      <div class="forum-header">
+        <div class="forum-details">
+          <h1>{{ forum.name }}</h1>
+          <p class="text-lead">{{ forum.description }}</p>
+        </div>
+        <router-link
+          :to="{ name: 'ThreadCreate', params: { forumId: forum.id } }"
+          class="btn-green btn-small"
+        >
+          Start a thread
+        </router-link>
       </div>
-      <router-link
-        :to="{name:'ThreadCreate', params: {forumId: forum.id}}"
-        class="btn-green btn-small"
-      >
-        Start a thread
-      </router-link>
+    </div>
+
+    <div class="col-full push-top">
+      <ThreadList :threads="threads" />
+      <v-pagination v-model="page" :pages="totalPages" active-color="#57AD8D" />
     </div>
   </div>
-
-  <div class="col-full push-top">
-    <ThreadList :threads="threads"/>
-    <v-pagination
-    v-model="page"
-    :pages="totalPages"
-    active-color="#57AD8D"
-  />
-  </div>
-</div>
 </template>
 
 <script>
@@ -45,26 +41,26 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
       page: parseInt(this.$route.query.page) || 1,
       perPage: 10
     }
   },
   computed: {
-    forum () {
+    forum() {
       return findById(this.$store.state.forums.items, this.id)
     },
-    threads () {
+    threads() {
       if (!this.forum) return []
       return this.$store.state.threads.items
-        .filter(thread => thread.forumId === this.forum.id)
-        .map(thread => this.$store.getters['threads/thread'](thread.id))
+        .filter((thread) => thread.forumId === this.forum.id)
+        .map((thread) => this.$store.getters['threads/thread'](thread.id))
     },
-    threadCount () {
+    threadCount() {
       return this.forum.threads?.length || 0
     },
-    totalPages () {
+    totalPages() {
       if (!this.threadCount) return 0
       return Math.ceil(this.threadCount / this.perPage)
     }
@@ -74,14 +70,18 @@ export default {
     ...mapActions('threads', ['fetchThreadsByPage']),
     ...mapActions('users', ['fetchUsers'])
   },
-  async created () {
+  async created() {
     const forum = await this.fetchForum({ id: this.id })
-    const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage })
-    await this.fetchUsers({ ids: threads.map(thread => thread.userId) })
+    const threads = await this.fetchThreadsByPage({
+      ids: forum.threads,
+      page: this.page,
+      perPage: this.perPage
+    })
+    await this.fetchUsers({ ids: threads.map((thread) => thread.userId) })
     this.asyncDataStatus_fetched()
   },
   watch: {
-    async page (page) {
+    async page(page) {
       this.$router.push({ query: { page: this.page } })
     }
   }
@@ -89,5 +89,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
