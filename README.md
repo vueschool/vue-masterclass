@@ -92,3 +92,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Looking for Firebase 9?
+Since the video course was created, Firebase has released a new version of it's JavaScript SDK. If you'd like to see code changes using Firebase 9 checkout the [firebase-9 branch](https://github.com/vueschool/vue-masterclass/tree/firebase-9), courtesy of [Michael Haslam](https://github.com/Ongomobile). Thanks Mike!
