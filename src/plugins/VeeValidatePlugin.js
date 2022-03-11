@@ -1,21 +1,24 @@
 import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
 import { required, email, min, url } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
-import firebase from '@/helpers/firebase'
-export default (app) => {
+import { db } from '@/helpers/firebase'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+export default app => {
   defineRule('required', required)
   defineRule('email', email)
   defineRule('min', min)
   defineRule('url', url)
   defineRule('unique', async (value, args) => {
-    let collection, field, excluding
+    let coll, field, excluding
     if (Array.isArray(args)) {
-      [collection, field, excluding] = args
+      ;[coll, field, excluding] = args
     } else {
-      ({ collection, field, excluding } = args)
+      ;({ coll, field, excluding } = args)
     }
     if (value === excluding) return true
-    const querySnapshot = await firebase.firestore().collection(collection).where(field, '==', value).get()
+    const queryArgs = [collection(db, coll), where(field, '==', value)]
+    const fieldQuery = query(...queryArgs)
+    const querySnapshot = await getDocs(fieldQuery)
     return querySnapshot.empty
   })
 
