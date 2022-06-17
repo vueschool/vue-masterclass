@@ -17,7 +17,7 @@
       </VeeForm>
 
       <div class="push-top text-center">
-        <button @click="signInWithGoogle" class="btn-red btn-xsmall">
+        <button @click="doGoogleSignIn" class="btn-red btn-xsmall">
           <i class="fa fa-google fa-btn"></i>Sign in with Google
         </button>
       </div>
@@ -25,7 +25,12 @@
   </div>
 </template>
 <script>
+import { useAuthStore } from '../stores/AuthStore'
 export default {
+  setup () {
+    const { signInWithEmailAndPassword, signInWithGoogle } = useAuthStore()
+    return { signInWithEmailAndPassword, signInWithGoogle }
+  },
   data () {
     return {
       form: {
@@ -34,17 +39,18 @@ export default {
       }
     }
   },
+
   methods: {
     async signIn () {
       try {
-        await this.$store.dispatch('auth/signInWithEmailAndPassword', { ...this.form })
+        await this.signInWithEmailAndPassword({ ...this.form })
         this.successRedirect()
       } catch (error) {
         alert(error.message)
       }
     },
-    async signInWithGoogle () {
-      await this.$store.dispatch('auth/signInWithGoogle')
+    async doGoogleSignIn () {
+      await this.signInWithGoogle()
       this.successRedirect()
     },
     successRedirect () {

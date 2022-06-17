@@ -21,6 +21,7 @@
     "firebase": "^8.4.1",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "pinia": "^2.0.14",
     "vee-validate": "^4.4.11",
     "vue": "^3.0.0",
     "vue-final-modal": "^3.4.2",

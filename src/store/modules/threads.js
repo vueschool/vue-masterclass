@@ -1,6 +1,7 @@
 import { findById, docToResource, makeAppendChildToParentMutation, makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 import firebase from '@/helpers/firebase'
 import chunk from 'lodash/chunk'
+import { useAuthStore } from '@/stores/AuthStore'
 export default {
   namespaced: true,
   state: {
@@ -29,7 +30,8 @@ export default {
   },
   actions: {
     async createThread ({ commit, state, dispatch, rootState }, { text, title, forumId }) {
-      const userId = rootState.auth.authId
+      const authStore = useAuthStore()
+      const userId = authStore.authId
       const publishedAt = firebase.firestore.FieldValue.serverTimestamp()
       const threadRef = firebase.firestore().collection('threads').doc()
       const thread = { forumId, title, publishedAt, userId, id: threadRef.id }

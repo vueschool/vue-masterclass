@@ -17,6 +17,9 @@ export default {
   computed: {
     categories () {
       return this.$store.state.categories.items
+    },
+    store () {
+      return this.$store
     }
   },
   methods: {

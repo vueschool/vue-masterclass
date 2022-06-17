@@ -1,5 +1,6 @@
 import firebase from '@/helpers/firebase'
 import { makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
+import { useAuthStore } from '@/stores/AuthStore'
 export default {
   namespaced: true,
   state: {
@@ -8,19 +9,20 @@ export default {
   getters: {},
   actions: {
     async createPost ({ commit, state, rootState }, post) {
-      post.userId = rootState.auth.authId
+      const authStore = useAuthStore()
+      post.userId = authStore.authId
       post.publishedAt = firebase.firestore.FieldValue.serverTimestamp()
       post.firstInThread = post.firstInThread || false
       const batch = firebase.firestore().batch()
       const postRef = firebase.firestore().collection('posts').doc()
       const threadRef = firebase.firestore().collection('threads').doc(post.threadId)
-      const userRef = firebase.firestore().collection('users').doc(rootState.auth.authId)
+      const userRef = firebase.firestore().collection('users').doc(authStore.authId)
       batch.set(postRef, post)
 
       const threadUpdates = {
         posts: firebase.firestore.FieldValue.arrayUnion(postRef.id)
       }
-      if (!post.firstInThread) threadUpdates.contributors = firebase.firestore.FieldValue.arrayUnion(rootState.auth.authId)
+      if (!post.firstInThread) threadUpdates.contributors = firebase.firestore.FieldValue.arrayUnion(authStore.authId)
       batch.update(threadRef, threadUpdates)
       batch.update(userRef, {
         postsCount: firebase.firestore.FieldValue.increment(1)
@@ -30,15 +32,16 @@ export default {
       commit('setItem', { resource: 'posts', item: { ...newPost.data(), id: newPost.id } }, { root: true }) // set the post
       commit('threads/appendPostToThread', { childId: newPost.id, parentId: post.threadId }, { root: true }) // append post to thread
       if (!post.firstInThread) {
-        commit('threads/appendContributorToThread', { childId: rootState.auth.authId, parentId: post.threadId }, { root: true })
+        commit('threads/appendContributorToThread', { childId: authStore.authId, parentId: post.threadId }, { root: true })
       }
     },
     async updatePost ({ commit, state, rootState }, { text, id }) {
+      const authStore = useAuthStore()
       const post = {
         text,
         edited: {
           at: firebase.firestore.FieldValue.serverTimestamp(),
-          by: rootState.auth.authId,
+          by: authStore.authId,
           moderated: false
         }
       }

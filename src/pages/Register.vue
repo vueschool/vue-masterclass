@@ -40,7 +40,13 @@
   </div>
 </template>
 <script>
+import { useAuthStore } from '../stores/AuthStore'
+
 export default {
+  setup () {
+    const { registerUserWithEmailAndPassword, signInWithGoogle } = useAuthStore()
+    return { registerUserWithEmailAndPassword, signInWithGoogle }
+  },
   data () {
     return {
       avatarPreview: null,
@@ -55,11 +61,11 @@ export default {
   },
   methods: {
     async register () {
-      await this.$store.dispatch('auth/registerUserWithEmailAndPassword', this.form)
+      await this.registerUserWithEmailAndPassword(this.form)
       this.$router.push('/')
     },
     async registerWithGoogle () {
-      await this.$store.dispatch('auth/signInWithGoogle')
+      await this.signInWithGoogle()
       this.$router.push('/')
     },
     handleImageUpload (e) {

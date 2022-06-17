@@ -53,6 +53,7 @@ import { mapActions } from 'vuex'
 import UserProfileCardEditorRandomAvatar from './UserProfileCardEditorRandomAvatar'
 import UserProfileCardEditorReauthenticate from './UserProfileCardEditorReauthenticate.vue'
 import useNotifications from '@/composables/useNotifications'
+import { useAuthStore } from '../stores/AuthStore'
 export default {
   components: { UserProfileCardEditorRandomAvatar, UserProfileCardEditorReauthenticate },
   props: {
@@ -62,8 +63,9 @@ export default {
     }
   },
   setup () {
+    const { updateEmail, uploadAvatar } = useAuthStore()
     const { addNotification } = useNotifications()
-    return { addNotification }
+    return { addNotification, updateEmail, uploadAvatar }
   },
   data () {
     return {
@@ -74,7 +76,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('auth', ['uploadAvatar']),
     async loadLocationOptions () {
       if (this.locationOptions.length) return
       const res = await fetch('https://restcountries.com/v3/all')
@@ -96,7 +97,7 @@ export default {
       }
     },
     async onReauthenticated () {
-      await this.$store.dispatch('auth/updateEmail', { email: this.activeUser.email })
+      await this.updateEmail({ email: this.activeUser.email })
       this.saveUserData()
     },
     async onReauthenticatedFailed () {

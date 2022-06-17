@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { findById } from '@/helpers'
 import store from '@/store'
+import { useAuthStore } from '../stores/AuthStore'
+import { storeToRefs } from 'pinia'
 const routes = [
   {
     path: '/',
@@ -86,7 +88,8 @@ const routes = [
     path: '/logout',
     name: 'SignOut',
     async beforeEnter (to, from) {
-      await store.dispatch('auth/signOut')
+      const { signOut } = useAuthStore()
+      await signOut()
       return { name: 'Home' }
     }
   },
@@ -111,12 +114,15 @@ router.afterEach(() => {
 })
 
 router.beforeEach(async (to, from) => {
-  await store.dispatch('auth/initAuthentication')
+  const { initAuthentication } = useAuthStore()
+  const { authId } = storeToRefs(useAuthStore())
+  await initAuthentication()
+  console.log(authId.value)
   store.dispatch('unsubscribeAllSnapshots')
-  if (to.meta.requiresAuth && !store.state.auth.authId) {
+  if (to.meta.requiresAuth && !authId.value) {
     return { name: 'SignIn', query: { redirectTo: to.path } }
   }
-  if (to.meta.requiresGuest && store.state.auth.authId) {
+  if (to.meta.requiresGuest && authId.value) {
     return { name: 'Home' }
   }
 })

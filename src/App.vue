@@ -24,19 +24,28 @@
 
 <script>
 import TheNavbar from '@/components/TheNavbar'
-import { mapActions } from 'vuex'
 import NProgress from 'nprogress'
 import AppNotifications from '@/components/AppNotifications'
+import { useAuthStore } from '@/stores/AuthStore'
+
 export default {
   name: 'App',
   components: { TheNavbar, AppNotifications },
+  setup () {
+    const { fetchAuthUser } = useAuthStore()
+    return { fetchAuthUser }
+  },
+  computed: {
+    store () {
+      return this.$store.state
+    }
+  },
   data () {
     return {
       showPage: false
     }
   },
   methods: {
-    ...mapActions('auth', ['fetchAuthUser']),
     onPageReady () {
       this.showPage = true
       NProgress.done()

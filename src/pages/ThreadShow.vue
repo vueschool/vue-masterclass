@@ -37,6 +37,8 @@ import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 import useNotifications from '@/composables/useNotifications'
 import difference from 'lodash/difference'
+import { useAuthStore } from '../stores/AuthStore'
+import { storeToRefs } from 'pinia'
 export default {
   name: 'ThreadShow',
   components: {
@@ -51,11 +53,11 @@ export default {
     }
   },
   setup () {
+    const { authUser } = storeToRefs(useAuthStore())
     const { addNotification } = useNotifications()
-    return { addNotification }
+    return { addNotification, authUser }
   },
   computed: {
-    ...mapGetters('auth', ['authUser']),
     threads () {
       return this.$store.state.threads.items
     },

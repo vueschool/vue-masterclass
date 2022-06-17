@@ -13,7 +13,13 @@
 
 <script>
 import { VueFinalModal } from 'vue-final-modal'
+import { useAuthStore } from '../stores/AuthStore'
+
 export default {
+  setup () {
+    const { reauthenticate } = useAuthStore()
+    return { reauth: reauthenticate }
+  },
   components: { VueFinalModal },
   props: {
     modelValue: { type: Boolean, default: false }
@@ -37,7 +43,7 @@ export default {
   methods: {
     async reauthenticate () {
       try {
-        await this.$store.dispatch('auth/reauthenticate', { email: this.email, password: this.password })
+        await this.reauth({ email: this.email, password: this.password })
         this.$emit('success')
       } catch (error) {
         this.$emit('fail', error)

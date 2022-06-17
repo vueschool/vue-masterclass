@@ -28,7 +28,7 @@
           </p>
         </div>
         <a
-          v-if="post.userId === $store.state.auth.authId"
+          v-if="post.userId === authId"
           @click.prevent="toggleEditMode(post.id)"
           href="#"
           style="margin-left: auto; padding-left:10px;"
@@ -51,6 +51,8 @@
 
 <script>
 import PostEditor from '@/components/PostEditor'
+import { useAuthStore } from '@/stores/AuthStore'
+import { mapState } from 'pinia'
 import { mapActions } from 'vuex'
 export default {
   components: { PostEditor },
@@ -66,6 +68,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(useAuthStore, ['authId']),
     users () {
       return this.$store.state.users.items
     }

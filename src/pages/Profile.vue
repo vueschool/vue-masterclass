@@ -24,16 +24,22 @@
 import PostList from '@/components/PostList'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
-import { mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import { useAuthStore } from '../stores/AuthStore'
+import { storeToRefs } from 'pinia'
+
 export default {
+  setup () {
+    const { fetchAuthUsersPosts } = useAuthStore()
+    const { authUser } = storeToRefs(useAuthStore())
+    return { fetchAuthUsersPosts, user: authUser }
+  },
   components: { PostList, UserProfileCard, UserProfileCardEditor },
   mixins: [asyncDataStatus],
   props: {
     edit: { type: Boolean, default: false }
   },
   computed: {
-    ...mapGetters('auth', { user: 'authUser' }),
     lastPostFetched () {
       if (this.user.posts.length === 0) return null
       return this.user.posts[this.user.posts.length - 1]
@@ -41,7 +47,7 @@ export default {
   },
   methods: {
     fetchUserPosts () {
-      return this.$store.dispatch('auth/fetchAuthUsersPosts', { startAfter: this.lastPostFetched })
+      return this.fetchAuthUsersPosts({ startAfter: this.lastPostFetched })
     }
   },
   async created () {
