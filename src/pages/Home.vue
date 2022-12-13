@@ -3,16 +3,9 @@
   <CategoryList :categories="categories"/>
 </template>
 
-<script>
+<script setup>
 import CategoryList from '@/components/CategoryList'
-export default {
-  components: {
-    CategoryList
-  },
-  computed: {
-    categories () {
-      return this.$store.state.categories
-    }
-  }
-}
+import { useCategoriesStore } from '../stores/CategoriesStore'
+import { storeToRefs } from 'pinia'
+const { categories } = storeToRefs(useCategoriesStore())
 </script>

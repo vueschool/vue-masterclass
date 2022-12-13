@@ -9,7 +9,9 @@
 </template>
 
 <script>
-
+import { mapState, mapActions } from 'pinia'
+import { useThreadsStore } from '../stores/ThreadsStore'
+import { usePostsStore } from '../stores/PostsStore'
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 export default {
@@ -25,12 +27,8 @@ export default {
     }
   },
   computed: {
-    threads () {
-      return this.$store.state.threads
-    },
-    posts () {
-      return this.$store.state.posts
-    },
+    ...mapState(useThreadsStore, ['threads']),
+    ...mapState(usePostsStore, ['posts']),
     thread () {
       return this.threads.find(thread => thread.id === this.id) // also available under this.$route.params.id
     },
@@ -39,12 +37,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions(usePostsStore, ['createPost']),
     addPost (eventData) {
       const post = {
         ...eventData.post,
         threadId: this.id
       }
-      this.$store.dispatch('createPost', post)
+      this.createPost(post)
     }
   }
 }

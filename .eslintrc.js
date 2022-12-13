@@ -2,7 +2,8 @@ module.exports = {
   root: true,
 
   env: {
-    node: true
+    node: true,
+    "vue/setup-compiler-macros": true
   },
 
   extends: [
@@ -17,6 +18,6 @@ module.exports = {
   rules: {
     'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   }
 }

@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
+    "pinia": "^2.0.28",
     "vue": "^3.0.0",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
@@ -26,7 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.0.0-0"
+    "eslint-plugin-vue": "^8.7.1"
   },
   "browserslist": [
     "> 1%",
