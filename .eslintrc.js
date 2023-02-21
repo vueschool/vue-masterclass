@@ -7,15 +7,17 @@ module.exports = {
 
   extends: [
     'plugin:vue/vue3-essential',
-    '@vue/standard'
+    'eslint:recommended'
   ],
 
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser'
   },
 
   rules: {
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'no-unused-vars': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/no-deprecated-router-link-tag-prop': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   }
