@@ -1,7 +1,7 @@
 // Imports
-const firestoreService = require('firestore-export-import')
 const firebaseConfig = require('./src/config/firebase.js')
-const serviceAccount = require('./serviceAccount.json')
+const { restore, initializeFirebaseApp } = require("firestore-export-import"); 
+const serviceAccount = require("./serviceAccount.json");
 const fs = require('fs')
 const tempFileName = `${__dirname}/data-temp.json`;
 
@@ -19,17 +19,17 @@ const tempFileName = `${__dirname}/data-temp.json`;
 // -------------------------------------
 
 // JSON To Firestore
-async function jsonToFirestore () {
-  try {
-    console.log('Initialzing Firebase')
-    await firestoreService.initializeApp(serviceAccount, firebaseConfig.databaseURL)
-    console.log('Firebase Initialized')
-
-    await firestoreService.restore(tempFileName)
-    console.log('Upload Success')
-  } catch (error) {
-    console.log(error)
-  }
+async function jsonToFirestore() { 
+  try { 
+    console.log("Initialzing Firebase"); 
+    await initializeFirebaseApp(serviceAccount,firebaseConfig.databaseURL); 
+    console.log("Firebase Initialized"); 
+    await restore(tempFileName); 
+    console.log("Upload Success"); 
+  } 
+  catch (error) 
+  { console.log(error); 
+  } 
 }
 
 // In order to preserve ids in data.json
