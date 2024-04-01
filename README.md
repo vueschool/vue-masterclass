@@ -95,3 +95,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Looking for Firebase 9?
 Since the video course was created, Firebase has released a new version of it's JavaScript SDK. If you'd like to see code changes using Firebase 9 checkout the [firebase-9 branch](https://github.com/vueschool/vue-masterclass/tree/firebase-9), courtesy of [Michael Haslam](https://github.com/Ongomobile). Thanks Mike!
+
+## Looking for Composition API, Pinia, TypeScript, etc?
+Since this video course was created, a lot has changed in the Vue.js ecosystem. [We have a brand new Master Class](https://vue.school/masterclass) geared towards addressing and teaching these updated technologies (WIP as of Q1 2024). We've had an amazing community member complete this course however, with these latest technologies. You can [see his source code in this github repo](https://github.com/JeremieLitzler/vueschool-course/tree/forum-vite). Thanks Jérémie!
